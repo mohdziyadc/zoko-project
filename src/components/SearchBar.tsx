@@ -1,15 +1,15 @@
-import { useState } from "react";
 import { Input } from "./ui/input";
+import { useMovieSearch } from "@/hooks/useMovieSearch";
 
 const SearchBar = () => {
-  const [searchTerm, setSearchTime] = useState("");
+  const { searchTerm, setSearchTerm } = useMovieSearch();
   return (
     <div>
       <Input
         type={"text"}
         placeholder="Search for movies"
         value={searchTerm}
-        onChange={(e) => setSearchTime(e.target.value)}
+        onChange={(e) => setSearchTerm(e.target.value)}
       />
     </div>
   );

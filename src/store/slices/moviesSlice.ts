@@ -22,6 +22,23 @@ const initialState: MovieState = {
   error: null,
 };
 
+export const fetchMoviesBySearch = createAsyncThunk(
+  "movies/fetchMoviesBySearch",
+  async (params: { searchTerm: string; page?: number }) => {
+    const response = await searchMovies(params.searchTerm, params.page);
+    console.log("Response " + JSON.stringify(response));
+    return response;
+  }
+);
+
+export const fetchMovieDetails = createAsyncThunk(
+  "movies/fetchMovieDetails",
+  async (id: string) => {
+    const response = await getMovieDetails(id);
+    return response;
+  }
+);
+
 const moviesSlice = createSlice({
   name: "movies",
   initialState,
@@ -79,22 +96,6 @@ const moviesSlice = createSlice({
       });
   },
 });
-
-export const fetchMoviesBySearch = createAsyncThunk(
-  "movies/fetchMoviesBySearch",
-  async (params: { searchTerm: string; page?: number }) => {
-    const response = await searchMovies(params.searchTerm, params.page);
-    return response;
-  }
-);
-
-export const fetchMovieDetails = createAsyncThunk(
-  "movies/fetchMovieDetails",
-  async (id: string) => {
-    const response = await getMovieDetails(id);
-    return response;
-  }
-);
 
 export const { setSearchTerm, resetSearch, clearSelectedMovie } =
   moviesSlice.actions;
