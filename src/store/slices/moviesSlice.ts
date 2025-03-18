@@ -98,4 +98,4 @@ export const fetchMovieDetails = createAsyncThunk(
 
 export const { setSearchTerm, resetSearch, clearSelectedMovie } =
   moviesSlice.actions;
-export default moviesSlice;
+export default moviesSlice.reducer;
