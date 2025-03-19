@@ -2,8 +2,10 @@ import { useState } from "react";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 import { Heart, Play, Star } from "lucide-react";
+import { useNavigate } from "react-router";
 
 type MovieCardProps = {
+  id: string;
   title: string;
   year: string;
   imageUrl: string;
@@ -12,16 +14,25 @@ type MovieCardProps = {
 };
 
 const MovieCard = (props: MovieCardProps) => {
-  const { title, year, imageUrl, rating, genre } = props;
+  const { id, title, year, imageUrl, rating, genre } = props;
 
   const [imageError, setImageError] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleImageError = () => {
     setImageError(true);
   };
 
+  const handleMovieClick = (movieId: string) => {
+    navigate(`/movie/${movieId}`);
+  };
+
   return (
-    <Card className="group p-0 relative overflow-hidden w-full max-w-xs rounded-xl transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_15px_rgba(255,165,0,0.5)]  bg-gradient-to-br from-orange-950 to-black">
+    <Card
+      onClick={() => handleMovieClick(id)}
+      className="group p-0 relative overflow-hidden w-full max-w-xs rounded-xl transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_15px_rgba(255,165,0,0.5)]  bg-gradient-to-br from-orange-950 to-black"
+    >
       {/* Rating Badge */}
       <div className="absolute top-3 right-3 z-20  font-bold  shadow-lg">
         <Button

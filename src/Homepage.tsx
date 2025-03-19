@@ -80,6 +80,7 @@ const HomePage = () => {
                 className="transform transition-all duration-300 hover:-translate-y-2"
               >
                 <MovieCard
+                  id={movie.imdbID}
                   title={movie.Title}
                   year={movie.Year}
                   imageUrl={movie.Poster}
