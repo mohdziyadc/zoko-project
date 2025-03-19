@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 import { Heart, Play, Star } from "lucide-react";
@@ -13,6 +14,12 @@ type MovieCardProps = {
 const MovieCard = (props: MovieCardProps) => {
   const { title, year, imageUrl, rating, genre } = props;
 
+  const [imageError, setImageError] = useState(false);
+
+  const handleImageError = () => {
+    setImageError(true);
+  };
+
   return (
     <Card className="group p-0 relative overflow-hidden w-full max-w-xs rounded-xl transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_15px_rgba(255,165,0,0.5)]  bg-gradient-to-br from-orange-950 to-black">
       {/* Rating Badge */}
@@ -26,12 +33,17 @@ const MovieCard = (props: MovieCardProps) => {
       </div>
 
       {/* Image Container */}
-      <div className="relative aspect-[11/12] w-full overflow-hidden">
+      <div className="relative  aspect-[11/12] w-full overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-t from-orange-950 via-transparent to-transparent z-10 opacity-80"></div>
         <img
-          src={imageUrl || "/placeholder.svg"}
+          src={
+            !imageError
+              ? imageUrl
+              : "https://betravingknows.com/wp-content/uploads/2017/06/video-movie-placeholder-image-grey.png"
+          }
           alt={`${title} movie poster`}
           className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
+          onError={handleImageError}
         />
 
         {/* Play Button Overlay */}
@@ -46,13 +58,16 @@ const MovieCard = (props: MovieCardProps) => {
       <div className="p-4 relative">
         {/* Title and Year */}
         <div className="mb-2">
-          <h3 className="font-bold text-xl text-white tracking-wide">
+          <h3 className="font-bold text-xl line-clamp-1 text-white tracking-wide">
             {title}
           </h3>
           <div className="flex items-center gap-2 mt-1">
             <span className="text-orange-400 font-medium">{year}</span>
             <span className="w-1.5 h-1.5 rounded-full bg-orange-500"></span>
-            <span className="text-orange-300">{genre}</span>
+            <span className="text-orange-300">
+              {genre?.charAt(0).toLocaleUpperCase()}
+              {genre?.slice(1, genre.length)}
+            </span>
           </div>
         </div>
 

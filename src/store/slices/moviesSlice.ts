@@ -26,7 +26,6 @@ export const fetchMoviesBySearch = createAsyncThunk(
   "movies/fetchMoviesBySearch",
   async (params: { searchTerm: string; page?: number }) => {
     const response = await searchMovies(params.searchTerm, params.page);
-    console.log("Response " + JSON.stringify(response));
     return response;
   }
 );
@@ -55,6 +54,7 @@ const moviesSlice = createSlice({
       state.totalResults = 0;
       state.currentPage = 1;
       state.status = "idle";
+      state.error = null;
     },
   },
   extraReducers: (builder) => {
@@ -65,6 +65,8 @@ const moviesSlice = createSlice({
       .addCase(fetchMoviesBySearch.fulfilled, (state, action) => {
         state.status = "succeeded";
 
+        console.log("Succeeded");
+
         if (action.meta.arg.page === 1) {
           state.searchResults = action.payload.Search || [];
         } else {
@@ -73,13 +75,16 @@ const moviesSlice = createSlice({
             ...(action.payload.Search || []),
           ];
         }
-
         state.totalResults = parseInt(action.payload.totalResults || "0", 10);
         state.currentPage = action.meta.arg.page || 1;
         state.error = null;
       })
       .addCase(fetchMoviesBySearch.rejected, (state, action) => {
         state.status = "failed";
+        state.searchResults = [];
+        state.totalResults = 0;
+        state.currentPage = 1;
+        state.status = "idle";
         state.error = action.error.message || "Failed to fetch movies";
       })
       .addCase(fetchMovieDetails.pending, (state) => {

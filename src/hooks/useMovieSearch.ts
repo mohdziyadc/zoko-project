@@ -19,9 +19,8 @@ export function useMovieSearch(delay: number = 500) {
 
     timeoutRef.current = setTimeout(() => {
       dispatch(setReduxSearchTerm(value));
-
       if (value.trim()) {
-        dispatch(fetchMoviesBySearch({ searchTerm: value, page: 1 }));
+        dispatch(fetchMoviesBySearch({ searchTerm: value.trim(), page: 1 }));
       }
     }, delay);
   };

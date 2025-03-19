@@ -1,49 +1,42 @@
-import React from "react";
+import { useCallback, useEffect } from "react";
 import SearchBar from "./components/SearchBar";
 import { Button } from "./components/ui/button";
-import { Search } from "lucide-react";
+import { Ban, ChevronDown, Eye, Loader2, Search } from "lucide-react";
 import MovieCard from "./components/MovieCard";
+import { useAppDispatch, useAppSelector } from "./hooks/reduxHooks";
+import { fetchMoviesBySearch, resetSearch } from "./store/slices/moviesSlice";
 
 // type Props = {};
 
 const HomePage = () => {
-  const movies = [
-    {
-      title: "Inception",
-      year: "2010",
-      imageUrl:
-        "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_.jpg",
-      rating: 8.8,
-      genre: "Sci-Fi",
-    },
-    {
-      title: "The Dark Knight",
-      year: "2008",
-      imageUrl: "https://m.media-amazon.com/images/I/81IfoBox2TL.jpg",
-      rating: 9.0,
-      genre: "Action",
-    },
-    {
-      title: "Interstellar",
-      year: "2014",
-      imageUrl:
-        "https://m.media-amazon.com/images/I/61wrhEawgQL._AC_UF1000,1000_QL80_.jpg",
-      rating: 8.6,
-      genre: "Adventure",
-    },
-    {
-      title: "Pulp Fiction",
-      year: "1994",
-      imageUrl:
-        "https://images-cdn.ubuy.co.in/653f9763c9fb060a774b8193-pulp-fiction-movie-poster-regular.jpg",
-      rating: 7.2,
-      genre: "Crime",
-    },
-  ];
+  const { searchResults, totalResults, currentPage, searchTerm, error } =
+    useAppSelector((state) => state.movies);
+  const { isLoading } = useAppSelector((state) => state.ui);
+  const dispatch = useAppDispatch();
+
+  const hasMoreResults = searchResults.length < totalResults;
+
+  const handleLoadMore = useCallback(() => {
+    if (searchTerm && hasMoreResults) {
+      dispatch(
+        fetchMoviesBySearch({
+          searchTerm: searchTerm.trim(),
+          page: currentPage + 1,
+        })
+      );
+    }
+  }, [dispatch, searchTerm, hasMoreResults, currentPage]);
+
+  useEffect(() => {
+    if (searchTerm === "") {
+      dispatch(resetSearch());
+    }
+  }, [searchTerm, dispatch]);
+
   return (
     <>
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold text-gray-800 mb-6">
+      <div className="container min-h-screen mx-auto px-4 py-8 flex flex-col">
+        <h1 className="text-3xl text-center font-bold text-gray-800 mb-6">
           Movie Explorer
         </h1>
         <div className="flex gap-2 w-full justify-center items-center">
@@ -55,22 +48,67 @@ const HomePage = () => {
           </Button>
         </div>
 
-        <div className="mt-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {movies.map((movie, index) => (
-            <div
-              key={index}
-              className="transform transition-all duration-300 hover:-translate-y-2"
-            >
-              <MovieCard
-                title={movie.title}
-                year={movie.year}
-                imageUrl={movie.imageUrl}
-                rating={movie.rating}
-                genre={movie.genre}
-              />
+        {error && searchTerm && !isLoading && (
+          <div className="flex flex-col flex-grow justify-center items-center w-full">
+            <div>
+              <Ban className="w-32 h-32 text-primary" />
             </div>
-          ))}
-        </div>
+            <div className="text-2xl font-light mt-2">{error}</div>
+          </div>
+        )}
+
+        {!error && !searchTerm && !isLoading && (
+          <div className="flex flex-col flex-grow justify-center items-center w-full">
+            <div>
+              <Eye className="h-32 w-32 text-primary/90" />
+            </div>
+            <div className="text-2xl font-light">
+              Seek and you shall find...
+            </div>
+          </div>
+        )}
+
+        {isLoading && searchResults.length === 0 ? (
+          <div className="flex flex-grow items-center  justify-center w-full">
+            <Loader2 className="h-10 w-10 text-primary animate-spin" />
+          </div>
+        ) : (
+          <div className="mt-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {searchResults.map((movie) => (
+              <div
+                key={movie.imdbID}
+                className="transform transition-all duration-300 hover:-translate-y-2"
+              >
+                <MovieCard
+                  title={movie.Title}
+                  year={movie.Year}
+                  imageUrl={movie.Poster}
+                  rating={8.5}
+                  genre={movie.Type}
+                />
+              </div>
+            ))}
+          </div>
+        )}
+
+        {hasMoreResults && searchResults.length > 0 && (
+          <div className="mt-8 flex justify-center">
+            <Button
+              onClick={handleLoadMore}
+              disabled={isLoading}
+              className="rounded-full px-4 py-5"
+            >
+              {isLoading ? (
+                <Loader2 className="animate-spin" />
+              ) : (
+                <div className="flex justify-between items-center">
+                  <span className="text-lg">Load More</span>
+                  <ChevronDown className="ml-1" />
+                </div>
+              )}
+            </Button>
+          </div>
+        )}
       </div>
     </>
   );
