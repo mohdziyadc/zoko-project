@@ -1,24 +1,37 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 import { Heart, Play, Star } from "lucide-react";
 import { useNavigate } from "react-router";
+import { useAppSelector } from "@/hooks/reduxHooks";
+import { useDispatch } from "react-redux";
+import {
+  addToFavorites,
+  removeFromFavorites,
+} from "@/store/slices/favoritesSlice";
+import { Movie } from "@/types";
 
 type MovieCardProps = {
-  id: string;
-  title: string;
-  year: string;
-  imageUrl: string;
-  rating?: number;
-  genre?: string;
+  movie: Movie;
+  rating: number;
+  genre: string;
 };
 
 const MovieCard = (props: MovieCardProps) => {
-  const { id, title, year, imageUrl, rating, genre } = props;
+  const { movie, rating, genre } = props;
+
+  const { imdbID: movieId, Title: title, Year: year, Poster: imageUrl } = movie;
 
   const [imageError, setImageError] = useState(false);
 
+  const { favorites } = useAppSelector((state) => state.favorites);
+  const dispatch = useDispatch();
+
   const navigate = useNavigate();
+
+  const isFavorited = useMemo(() => {
+    return favorites.some((movie) => movie.imdbID === movieId);
+  }, [favorites, movieId]);
 
   const handleImageError = () => {
     setImageError(true);
@@ -28,23 +41,35 @@ const MovieCard = (props: MovieCardProps) => {
     navigate(`/movie/${movieId}`);
   };
 
+  const handleFavoritesToggle = () => {
+    if (isFavorited) {
+      dispatch(removeFromFavorites(movieId));
+    } else {
+      dispatch(addToFavorites(movie));
+    }
+  };
+
   return (
-    <Card
-      onClick={() => handleMovieClick(id)}
-      className="group p-0 relative overflow-hidden w-full max-w-xs rounded-xl transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_15px_rgba(255,165,0,0.5)]  bg-gradient-to-br from-orange-950 to-black"
-    >
+    <Card className="group p-0 relative overflow-hidden w-full max-w-xs rounded-xl transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_15px_rgba(255,165,0,0.5)]  bg-gradient-to-br from-orange-950 to-black">
       {/* Rating Badge */}
       <div className="absolute top-3 right-3 z-20  font-bold  shadow-lg">
         <Button
           className="rounded-full w-12 h-12"
-          onClick={() => console.log("Hear Button Clicked")}
+          variant={"default"}
+          onClick={handleFavoritesToggle}
         >
-          <Heart className="w-10 h-10" />
+          <Heart
+            className="w-10 h-10"
+            fill={isFavorited ? "white" : "transparent"}
+          />
         </Button>
       </div>
 
       {/* Image Container */}
-      <div className="relative  aspect-[11/12] w-full overflow-hidden">
+      <div
+        className="relative  aspect-[11/12] w-full overflow-hidden cursor-pointer"
+        onClick={() => handleMovieClick(movieId)}
+      >
         <div className="absolute inset-0 bg-gradient-to-t from-orange-950 via-transparent to-transparent z-10 opacity-80"></div>
         <img
           src={

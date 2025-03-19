@@ -1,10 +1,11 @@
 import { useCallback, useEffect } from "react";
 import SearchBar from "./components/SearchBar";
 import { Button } from "./components/ui/button";
-import { Ban, ChevronDown, Eye, Loader2, Search } from "lucide-react";
+import { Ban, ChevronDown, Eye, Heart, Loader2, Search } from "lucide-react";
 import MovieCard from "./components/MovieCard";
 import { useAppDispatch, useAppSelector } from "./hooks/reduxHooks";
 import { fetchMoviesBySearch, resetSearch } from "./store/slices/moviesSlice";
+import { useNavigate } from "react-router";
 
 // type Props = {};
 
@@ -13,6 +14,7 @@ const HomePage = () => {
     useAppSelector((state) => state.movies);
   const { isLoading } = useAppSelector((state) => state.ui);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const hasMoreResults = searchResults.length < totalResults;
 
@@ -27,6 +29,10 @@ const HomePage = () => {
     }
   }, [dispatch, searchTerm, hasMoreResults, currentPage]);
 
+  const handleFavoritesClick = () => {
+    navigate("/favorites");
+  };
+
   useEffect(() => {
     if (searchTerm === "") {
       dispatch(resetSearch());
@@ -36,9 +42,14 @@ const HomePage = () => {
   return (
     <>
       <div className="container min-h-screen mx-auto px-4 py-8 flex flex-col">
-        <h1 className="text-3xl text-center font-bold text-gray-800 mb-6">
-          Movie Explorer
-        </h1>
+        <div className="flex w-full justify-between mb-6 items-center">
+          <div className="text-3xl font-bold text-gray-800 ">
+            Movie Explorer
+          </div>
+          <Button className="rounded-full" onClick={handleFavoritesClick}>
+            Your Favorites <Heart fill={"white"} />
+          </Button>
+        </div>
         <div className="flex gap-2 w-full justify-center items-center">
           <div className="flex-[95%]">
             <SearchBar />
@@ -79,14 +90,7 @@ const HomePage = () => {
                 key={movie.imdbID}
                 className="transform transition-all duration-300 hover:-translate-y-2"
               >
-                <MovieCard
-                  id={movie.imdbID}
-                  title={movie.Title}
-                  year={movie.Year}
-                  imageUrl={movie.Poster}
-                  rating={8.5}
-                  genre={movie.Type}
-                />
+                <MovieCard movie={movie} rating={8.5} genre={movie.Type} />
               </div>
             ))}
           </div>

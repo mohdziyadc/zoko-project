@@ -1,8 +1,13 @@
+import { useEffect } from "react";
 import { Input } from "./ui/input";
 import { useMovieSearch } from "@/hooks/useMovieSearch";
 
 const SearchBar = () => {
   const { searchTerm, setSearchTerm } = useMovieSearch();
+
+  useEffect(() => {
+    console.log("Redux searchTerm:", searchTerm);
+  });
   return (
     <div>
       <Input
