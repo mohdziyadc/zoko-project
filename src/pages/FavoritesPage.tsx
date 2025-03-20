@@ -1,6 +1,6 @@
 import { useAppSelector } from "../hooks/reduxHooks";
 import MovieCard from "../components/MovieCard";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Heart } from "lucide-react";
 import { useNavigate } from "react-router";
 
 const FavoritesPage = () => {
@@ -19,7 +19,10 @@ const FavoritesPage = () => {
       <div className="container min-h-screen mx-auto  flex flex-col">
         <div>
           {favorites.length === 0 ? (
-            <div>No Favorites. Add movies to your favorites</div>
+            <div className="flex flex-col gap-2 min-h-[60vh] flex-grow justify-center items-center text-2xl text-primary font-light">
+              <Heart className="h-16 w-16" />
+              <div>No Favorites. Add movies to your favorites</div>
+            </div>
           ) : (
             <div className="mt-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {favorites.map((movie) => (
