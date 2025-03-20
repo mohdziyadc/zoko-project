@@ -12,6 +12,8 @@ const persistConfig = {
   whitelist: ["favorites"],
 };
 
+// Register loading callback to update the loading state
+// in the api interceptors
 registerLoadingCallback((isLoading) => {
   store.dispatch(setLoading(isLoading));
 });

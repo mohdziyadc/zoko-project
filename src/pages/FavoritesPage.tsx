@@ -1,4 +1,3 @@
-import React from "react";
 import { useAppSelector } from "../hooks/reduxHooks";
 import MovieCard from "../components/MovieCard";
 import { ChevronLeft } from "lucide-react";

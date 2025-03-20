@@ -7,8 +7,6 @@ import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
 import { fetchMoviesBySearch, resetSearch } from "../store/slices/moviesSlice";
 import { useNavigate } from "react-router";
 
-// type Props = {};
-
 const HomePage = () => {
   const { searchResults, totalResults, currentPage, searchTerm, error } =
     useAppSelector((state) => state.movies);
