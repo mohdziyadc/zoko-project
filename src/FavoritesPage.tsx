@@ -4,9 +4,7 @@ import MovieCard from "./components/MovieCard";
 import { ChevronLeft } from "lucide-react";
 import { useNavigate } from "react-router";
 
-type Props = {};
-
-const FavoritesPage = (props: Props) => {
+const FavoritesPage = () => {
   const { favorites } = useAppSelector((state) => state.favorites);
   const navigate = useNavigate();
   return (

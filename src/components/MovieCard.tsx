@@ -29,6 +29,9 @@ const MovieCard = (props: MovieCardProps) => {
 
   const navigate = useNavigate();
 
+  const placeholderImage =
+    "https://betravingknows.com/wp-content/uploads/2017/06/video-movie-placeholder-image-grey.png";
+
   const isFavorited = useMemo(() => {
     return favorites.some((movie) => movie.imdbID === movieId);
   }, [favorites, movieId]);
@@ -50,8 +53,8 @@ const MovieCard = (props: MovieCardProps) => {
   };
 
   return (
-    <Card className="group p-0 relative overflow-hidden w-full max-w-xs rounded-xl transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_15px_rgba(255,165,0,0.5)]  bg-gradient-to-br from-orange-950 to-black">
-      {/* Rating Badge */}
+    <Card className="group p-0 relative overflow-hidden w-full max-w-xs rounded-xl transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_15px_rgba(255,110,0,0.8)]  bg-gradient-to-br from-orange-950 to-black">
+      {/* Favorite Button */}
       <div className="absolute top-3 right-3 z-20  font-bold  shadow-lg">
         <Button
           className="rounded-full w-12 h-12"
@@ -72,11 +75,7 @@ const MovieCard = (props: MovieCardProps) => {
       >
         <div className="absolute inset-0 bg-gradient-to-t from-orange-950 via-transparent to-transparent z-10 opacity-80"></div>
         <img
-          src={
-            !imageError
-              ? imageUrl
-              : "https://betravingknows.com/wp-content/uploads/2017/06/video-movie-placeholder-image-grey.png"
-          }
+          src={!imageError ? imageUrl : placeholderImage}
           alt={`${title} movie poster`}
           className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
           onError={handleImageError}
@@ -84,7 +83,7 @@ const MovieCard = (props: MovieCardProps) => {
 
         {/* Play Button Overlay */}
         <div className="absolute inset-0 flex items-center justify-center z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <div className="w-16 h-16 rounded-full bg-orange-500/80 flex items-center justify-center backdrop-blur-sm">
+          <div className="w-16 h-16 rounded-full bg-orange-500/70 flex items-center justify-center backdrop-blur-sm">
             <Play className="h-6 w-6 text-white fill-amber-100" />
           </div>
         </div>
@@ -105,23 +104,6 @@ const MovieCard = (props: MovieCardProps) => {
               {genre?.slice(1, genre.length)}
             </span>
           </div>
-        </div>
-
-        {/* Rating Stars */}
-        <div className="flex items-center gap-1">
-          {[...Array(5)].map((_, i) => (
-            <Star
-              key={i}
-              className={`w-4 h-4 ${
-                i < Math.floor(rating! / 2)
-                  ? "fill-orange-400 text-orange-400"
-                  : "text-orange-800"
-              }`}
-            />
-          ))}
-          <span className="ml-2 text-xs text-orange-300 font-medium">
-            {rating}/10
-          </span>
         </div>
 
         {/* Decorative Element */}
