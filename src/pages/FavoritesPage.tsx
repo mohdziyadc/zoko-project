@@ -16,10 +16,10 @@ const FavoritesPage = () => {
           Your Favorites
         </div>
       </div>
-      <div className="container min-h-screen mx-auto  flex flex-col">
+      <div className="container min-h-screen mx-auto px-6  flex flex-col">
         <div>
           {favorites.length === 0 ? (
-            <div className="flex flex-col gap-2 min-h-[60vh] flex-grow justify-center items-center text-2xl text-primary font-light">
+            <div className="flex flex-col gap-2 min-h-[60vh] text-center flex-grow justify-center items-center text-2xl text-primary font-light">
               <Heart className="h-16 w-16" />
               <div>No Favorites. Add movies to your favorites</div>
             </div>
