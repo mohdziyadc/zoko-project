@@ -3,13 +3,18 @@ import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import moviesReducer from "./slices/moviesSlice";
 import favoritesReducer from "./slices/favoritesSlice";
-import uiReducer from "./slices/uiSlice";
+import uiReducer, { setLoading } from "./slices/uiSlice";
+import { registerLoadingCallback } from "@/lib/loadingService";
 
 const persistConfig = {
   key: "root",
   storage,
   whitelist: ["favorites"],
 };
+
+registerLoadingCallback((isLoading) => {
+  store.dispatch(setLoading(isLoading));
+});
 
 const rootReducer = combineReducers({
   movies: moviesReducer,

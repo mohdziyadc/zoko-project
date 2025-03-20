@@ -1,3 +1,4 @@
+import { setLoading } from "@/lib/loadingService";
 import axios from "axios";
 const OMDB_API_KEY = import.meta.env.VITE_OMDB_API_KEY;
 const OMDB_BASE_URL = "https://www.omdbapi.com/";
@@ -10,35 +11,23 @@ const api = axios.create({
 });
 
 api.interceptors.request.use(
-  async (config) => {
-    // Set loading state to true before request is sent
-    const { store } = await import("@/store/store"); // Lazy import store.ts to avoid circular dependency
-    const { setLoading } = await import("@/store/slices/uiSlice");
-
-    store.dispatch(setLoading(true));
+  (config) => {
+    setLoading(true);
     return config;
   },
-  async (error) => {
-    const { store } = await import("@/store/store"); // Lazy import store.ts to avoid circular dependency
-    const { setLoading } = await import("@/store/slices/uiSlice");
-    store.dispatch(setLoading(false));
+  (error) => {
+    setLoading(false);
     return Promise.reject(error);
   }
 );
 
 api.interceptors.response.use(
   async (response) => {
-    // Set loading state to false after response
-    const { store } = await import("@/store/store"); // Lazy import store.ts to avoid circular dependency
-    const { setLoading } = await import("@/store/slices/uiSlice");
-    store.dispatch(setLoading(false));
+    setLoading(false);
     return response;
   },
   async (error) => {
-    // Set loading state to false if response error
-    const { store } = await import("@/store/store"); // Lazy import store.ts to avoid circular dependency
-    const { setLoading } = await import("@/store/slices/uiSlice");
-    store.dispatch(setLoading(false));
+    setLoading(false);
     return Promise.reject(error);
   }
 );
