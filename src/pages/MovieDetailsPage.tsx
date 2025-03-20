@@ -1,14 +1,14 @@
 import { ChevronLeft, Heart, Loader2, Star } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router";
-import { Movie } from "./types";
-import { useAppDispatch, useAppSelector } from "./hooks/reduxHooks";
-import { fetchMovieDetails } from "./store/slices/moviesSlice";
-import { Button } from "./components/ui/button";
+import { Movie } from "../types";
+import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
+import { fetchMovieDetails } from "../store/slices/moviesSlice";
+import { Button } from "../components/ui/button";
 import {
   addToFavorites,
   removeFromFavorites,
-} from "./store/slices/favoritesSlice";
+} from "../store/slices/favoritesSlice";
 
 const MovieDetailsPage = () => {
   const { id } = useParams();

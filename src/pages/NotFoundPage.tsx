@@ -1,9 +1,6 @@
 import { Ban } from "lucide-react";
-import React from "react";
 
-type Props = {};
-
-const NotFoundPage = (props: Props) => {
+const NotFoundPage = () => {
   return (
     <div className="flex flex-col gap-2 justify-center items-center w-full h-screen">
       <div>

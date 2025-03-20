@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
-import { Heart, Play, Star } from "lucide-react";
+import { Heart, Play } from "lucide-react";
 import { useNavigate } from "react-router";
 import { useAppSelector } from "@/hooks/reduxHooks";
 import { useDispatch } from "react-redux";
@@ -18,7 +18,7 @@ type MovieCardProps = {
 };
 
 const MovieCard = (props: MovieCardProps) => {
-  const { movie, rating, genre } = props;
+  const { movie, genre } = props;
 
   const { imdbID: movieId, Title: title, Year: year, Poster: imageUrl } = movie;
 

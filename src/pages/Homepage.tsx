@@ -1,10 +1,10 @@
 import { useCallback, useEffect } from "react";
-import SearchBar from "./components/SearchBar";
-import { Button } from "./components/ui/button";
+import SearchBar from "../components/SearchBar";
+import { Button } from "../components/ui/button";
 import { Ban, ChevronDown, Eye, Heart, Loader2, Search } from "lucide-react";
-import MovieCard from "./components/MovieCard";
-import { useAppDispatch, useAppSelector } from "./hooks/reduxHooks";
-import { fetchMoviesBySearch, resetSearch } from "./store/slices/moviesSlice";
+import MovieCard from "../components/MovieCard";
+import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
+import { fetchMoviesBySearch, resetSearch } from "../store/slices/moviesSlice";
 import { useNavigate } from "react-router";
 
 // type Props = {};

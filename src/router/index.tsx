@@ -1,7 +1,7 @@
-import FavoritesPage from "@/FavoritesPage";
-import HomePage from "@/Homepage";
-import MovieDetailsPage from "@/MovieDetailsPage";
-import NotFoundPage from "@/NotFoundPage";
+import FavoritesPage from "@/pages/FavoritesPage";
+import HomePage from "@/pages/Homepage";
+import MovieDetailsPage from "@/pages/MovieDetailsPage";
+import NotFoundPage from "@/pages/NotFoundPage";
 import { createBrowserRouter, RouterProvider } from "react-router";
 
 const router = createBrowserRouter([
